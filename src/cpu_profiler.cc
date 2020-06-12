@@ -12,7 +12,7 @@ CpuProfiler::CpuProfiler () {}
 CpuProfiler::~CpuProfiler () {}
 
 #if (NODE_MODULE_VERSION > 0x0039)
-v8::CpuProfiler* current_cpuprofiler = v8::CpuProfiler::New(v8::Isolate::GetCurrent());
+static v8::CpuProfiler* current_cpuprofiler = nullptr;
 #endif
 
 void CpuProfiler::Initialize (Local<Object> target) {
@@ -28,6 +28,11 @@ void CpuProfiler::Initialize (Local<Object> target) {
 
   Profile::profiles.Reset(profiles);
   Nan::Set(target, Nan::New<String>("cpu").ToLocalChecked(), cpuProfiler);
+
+#if (NODE_MODULE_VERSION > 0x0039)
+  current_cpuprofiler = v8::CpuProfiler::New(v8::Isolate::GetCurrent());
+#endif
+
 }
 
 NAN_METHOD(CpuProfiler::StartProfiling) {
