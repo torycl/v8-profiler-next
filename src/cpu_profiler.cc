@@ -30,7 +30,8 @@ void CpuProfiler::Initialize (Local<Object> target) {
   Nan::Set(target, Nan::New<String>("cpu").ToLocalChecked(), cpuProfiler);
 
 #if (NODE_MODULE_VERSION > 0x0039)
-  current_cpuprofiler = v8::CpuProfiler::New(v8::Isolate::GetCurrent());
+  v8::Isolate *isolate = v8::Isolate::GetCurrent();
+  current_cpuprofiler = v8::CpuProfiler::New(isolate);
 #endif
 
 }
